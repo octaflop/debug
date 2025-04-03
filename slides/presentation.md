@@ -14,7 +14,7 @@ paginate: true
 
 ---
 
-### Chris
+### Chris!
 
 9m lines c++
 20 year old, young careers
