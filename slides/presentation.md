@@ -5,173 +5,88 @@ theme: gaia
 paginate: true
 ---
 
-# Python Web Development Journey
-## From Static Sites to Dynamic Applications
-
-- A 3-act workshop exploring web development with Python
-- ![](./workshop_qr.png)
+# Debugging
+## Stories from python and beyond
 
 ---
 
-# Act 1: Getting Started with Web Basics 🌐
-
-<!-- eta: 15min -->
-
-## Understanding Static Web Hosting
-
-- Basic HTML/CSS structure
-- Python's `http.server` for local development
-- Deploying static sites
+# Stories
 
 ---
 
-# Your First Python Web Server 🚀
+### Chris
 
-```python
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+9m lines c++
+20 year old, young careers
 
-def run_server(port=8000):
-    server_address = ('', port)
-    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-    print(f"Serving at port {port}")
-    httpd.serve_forever()
-
-if __name__ == '__main__':
-    run_server()
-```
+Week after release no one could reproduce anything.
+Reviews were unkind. A lot of bad press.
+Users were advocating to use previous version.
+Swat team of 3 took 4 weeks to reproduce issue. After a couple weeks found a “pointer truncation” issue.
+Solution: Forced virtual memory allocation. Used tool to view memory layout.
+Wrote utility to allocate memory and fill in all the gaps until everything was full and everything to flush out crashes.
 
 ---
 
-# Act 2: Enter FastAPI ⚡
+## Faris
 
-<!-- eta: 20min -->
+90k tests and permutations which had 100+ versions and updates associated. Batch job was 72hours.
+Very touchy, just run it and let it run. For whatever reason if it ran to hour 70 it meant it had to be reran.
+Created observation metrics for how to. Looking at SQL query explain of a query that took 15min just to explain.
+Epilogue; true root cause: cloud team was killing jobs they didn’t understand why the just killed it.
 
-## Moving to Modern Web Frameworks
-
-- Introduction to FastAPI
-- RESTful API concepts
-- Request/Response cycle
-- Path operations and routing
 
 ---
 
-# Basic FastAPI Application
 
-```python
-from fastapi import FastAPI
-from pydantic import BaseModel
+## Bruce
 
-app = FastAPI()
+Hardware bug. Multiple 32bit processors. Colab with Motorola.
+You had flexibility to single step the process. It wasn’t limited to just run.
+SE had a process that would crash and only way to get it back is via power cycling the machine.
+5 modes available that used 3 bits. Was in a mode that didn’t exist. Creator had not covered unused modes.
 
-class User(BaseModel):
-    username: str
-    email: str
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.post("/users/")
-def create_user(user: User):
-    return user
-```
+Could tell the processor wasn’t in a valid mode. It had to be the state machine based on the invalid mode and very limited ways that could happen. Random noise and proper recovery seemed to be the result.
 
 ---
 
-# Understanding Templates 📝
 
-<!-- eta: 15min -->
+## Ty
 
-## Why Templates Matter
+Stress testing system and ended up getting an error that was nonreplicable. Realized it was using a stale cache and tricky race condition and first deep dive into debugging.
 
-- Separation of concerns
-- Dynamic content generation
-- Template syntax basics
-- Introduction to Jinja2
+
+
 
 ---
 
-# Act 3: Building Dynamic Applications 🎭
+# Lessons  🎯
 
-<!-- eta: 25min -->
-
-## The Power of Jinja2 with FastAPI
-
-- Template inheritance
-- Dynamic data rendering
-- HTMX integration
-- Real-world patterns
-
----
-
-# Demo: Jinja2 Templates in Action
-
-```python
-from fastapi import FastAPI
-from fastapi.templating import Jinja2Templates
-from fasthx import Jinja
-
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-jinja = Jinja(templates)
-
-@app.get("/")
-@jinja.page("index.html")
-def index():
-    return {"message": "Welcome!"}
-```
-
----
-
-# Building Our User List App 📋
-
-```python
-@app.get("/user-list")
-@jinja.hx("user-list.html")
-def htmx_or_data(response: Response) -> tuple[User, ...]:
-    return (
-        User(first_name="Alice", last_name="Johnson"),
-        User(first_name="Bob", last_name="Smith"),
-    )
-```
-
----
-
-# Template Structure
-
-```html
-{% extends 'base.html' %}
-{% block content %}
-    {% for user in items %}
-        {{ user.first_name }} {{ user.last_name }}
-    {% endfor %}
-{% endblock %}
-```
-
----
-
-# Best Practices & Next Steps 🎯
-
-- Structure matters: Keep templates organized
-- Use template inheritance effectively
-- Implement proper error handling
-- Consider caching strategies
-- Explore HTMX for enhanced interactivity
+- Stay Organized
+- Build a test environment
+- Chop off the parts that don't matter
+  - Be modular
+- Write code for your future self
+- Test one variable at a time: be scientific
+- Communicate
+- State upfront assumptions and hold to that
+- PEP8 / type hinting
+  - reproducibility matters
+- test the code you think you're testing
+  - stg / dev / local web indications
+  - versions
+  - while we're on this: update should be built in
+- `git bisect`
 
 ---
 
 # Resources 📚
 
-## Learning Materials
-
-- FastAPI Documentation: [fastapi.tiangolo.com](https://fastapi.tiangolo.com)
-- Jinja2 Documentation: [jinja.palletsprojects.com](https://jinja.palletsprojects.com)
-- HTMX: [htmx.org](https://htmx.org)
 
 ---
 
 # Workshop Repository
 
-- [Your Repository Link]
+- [debug](https://github.com/octaflop/debug)
 - Contains all examples and additional resources
 - ![](./repo_qr.png)
